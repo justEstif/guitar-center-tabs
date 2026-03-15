@@ -3,6 +3,9 @@ node_modules/
 build/
 dist/
 
+# Vercel
+.vercel/
+
 # Local DB
 local.db
 local.db-wal
