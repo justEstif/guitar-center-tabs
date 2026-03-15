@@ -1,29 +1,81 @@
 @import "tailwindcss";
 
+:root {
+  /* Brand */
+  --color-brand: oklch(0.65 0.13 55);          /* amber-600 equivalent */
+  --color-brand-hover: oklch(0.58 0.14 55);    /* amber-700 equivalent */
+  --color-brand-active: oklch(0.52 0.14 55);   /* amber-800 equivalent */
+
+  /* Surfaces — warm-tinted neutrals */
+  --surface-page: oklch(0.99 0.005 80);        /* warm off-white (≈ amber-50) */
+  --surface-raised: oklch(1 0 0);              /* pure white for cards/inputs */
+  --surface-subtle: oklch(0.97 0.005 80);      /* slightly darker warm neutral */
+
+  /* Text */
+  --text-primary: oklch(0.18 0.01 60);         /* warm near-black */
+  --text-secondary: oklch(0.45 0.01 60);       /* warm stone-500 */
+  --text-muted: oklch(0.60 0.008 60);          /* warm stone-400 */
+
+  /* Border */
+  --border-subtle: oklch(0.88 0.008 80);       /* warm stone-200 */
+  --border-default: oklch(0.80 0.01 80);       /* warm stone-300 */
+
+  /* Semantic */
+  --color-error: oklch(0.52 0.19 25);          /* red-600 equivalent */
+  --color-success: oklch(0.52 0.15 145);       /* green-600 equivalent */
+
+  /* Typography */
+  --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+
+  /* Motion */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --duration-fast: 100ms;
+  --duration-base: 150ms;
+  --duration-slow: 300ms;
+}
+
 @layer base {
-	/* Ensure monospace tab content never wraps */
-	.tab-content {
-		font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
-		font-size: 0.85rem;
-		line-height: 1.6;
-		white-space: pre;
-		overflow-x: auto;
-		-webkit-overflow-scrolling: touch;
-	}
+  body {
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    background-color: var(--surface-page);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Ensure monospace tab content never wraps */
+  .tab-content {
+    font-family: var(--font-mono);
+    font-size: 1rem;        /* FD-T2: raised from 0.85rem */
+    line-height: 1.6;
+    white-space: pre;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    font-variant-numeric: tabular-nums; /* FD-T5 */
+  }
+
+  /* FD-M1: Respect reduced motion globally */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+    }
+  }
 }
 
 @media print {
-	.no-print {
-		display: none !important;
-	}
+  .no-print {
+    display: none !important;
+  }
 
-	body {
-		font-size: 12pt;
-	}
+  body {
+    font-size: 12pt;
+  }
 
-	.tab-content {
-		font-size: 10pt;
-		white-space: pre;
-		overflow: visible;
-	}
+  .tab-content {
+    font-size: 10pt;
+    white-space: pre;
+    overflow: visible;
+  }
 }

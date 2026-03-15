@@ -15,7 +15,7 @@
 
 <svelte:head><title>Register — GC Tabs</title></svelte:head>
 
-<div class="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4">
+<div class="min-h-screen bg-stone-50 flex flex-col items-center justify-center px-4">
 	<div class="w-full max-w-sm">
 		<div class="text-center mb-8">
 			<div class="text-4xl mb-2">🎸</div>
@@ -35,44 +35,44 @@
 					autocapitalize="none"
 					required
 					placeholder="e.g. guitarteacher"
-					class="w-full border border-gray-300 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-gray-900"
+					class="w-full border border-gray-300 rounded-xl px-4 py-3 text-base focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-600"
 				/>
 			</div>
 
 			<!-- PIN -->
-			<div>
-				<label for="pin-numpad" class="block text-sm font-medium text-gray-700 mb-1">4-digit PIN</label>
+			<fieldset>
+				<legend class="block text-sm font-medium text-gray-700 mb-1">4-digit PIN</legend>
 				<input type="hidden" name="pin" value={pin} />
 
 				<!-- PIN display -->
 				<div class="flex justify-center gap-3 mb-3">
 					{#each [0,1,2,3] as i}
-						<div class="w-12 h-12 rounded-xl border-2 flex items-center justify-center text-xl font-bold
-							{pin.length > i ? 'border-gray-900 bg-gray-900 text-white' : 'border-gray-300 text-gray-300'}">
+						<div class="w-12 h-12 rounded-xl border-2 flex items-center justify-center text-xl font-bold transition-transform duration-100 ease-out
+							{pin.length > i ? 'border-amber-600 bg-amber-600 text-white scale-100 opacity-100' : 'border-gray-300 text-gray-300 scale-75 opacity-60'}">
 							{pin.length > i ? '●' : '○'}
 						</div>
 					{/each}
 				</div>
 
 				<!-- Numpad -->
-				<div id="pin-numpad" class="grid grid-cols-3 gap-2">
+				<div class="grid grid-cols-3 gap-2" role="group" aria-label="PIN numpad">
 					{#each ['1','2','3','4','5','6','7','8','9'] as d}
 						<button type="button" onclick={() => appendDigit(d)}
-							class="h-12 rounded-xl border border-gray-200 text-lg font-semibold text-gray-800 bg-gray-50 hover:bg-gray-100 active:bg-gray-200">
+							class="h-12 rounded-xl border border-gray-200 text-lg font-semibold text-gray-800 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 transition-colors duration-150">
 							{d}
 						</button>
 					{/each}
-					<div></div>
+					<div aria-hidden="true"></div>
 					<button type="button" onclick={() => appendDigit('0')}
-						class="h-12 rounded-xl border border-gray-200 text-lg font-semibold text-gray-800 bg-gray-50 hover:bg-gray-100 active:bg-gray-200">
+						class="h-12 rounded-xl border border-gray-200 text-lg font-semibold text-gray-800 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 transition-colors duration-150">
 						0
 					</button>
-					<button type="button" onclick={backspace}
-						class="h-12 rounded-xl border border-gray-200 text-lg text-gray-600 bg-gray-50 hover:bg-gray-100 active:bg-gray-200">
+					<button type="button" onclick={backspace} aria-label="Backspace"
+						class="h-12 rounded-xl border border-gray-200 text-lg text-gray-600 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 transition-colors duration-150">
 						⌫
 					</button>
 				</div>
-			</div>
+			</fieldset>
 
 			{#if form?.error}
 				<p class="text-red-600 text-sm text-center">{form.error}</p>
@@ -81,7 +81,7 @@
 			<button
 				type="submit"
 				disabled={pin.length < 4}
-				class="w-full bg-gray-900 text-white font-semibold py-3 rounded-xl disabled:opacity-40 hover:bg-gray-700 active:bg-gray-800">
+				class="w-full bg-amber-600 text-white font-semibold py-3 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed hover:bg-amber-700 active:bg-amber-800 transition-colors duration-150">
 				Create account
 			</button>
 		</form>

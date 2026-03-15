@@ -5,7 +5,7 @@
 	let { form }: { form: ActionData } = $props();
 </script>
 
-<svelte:head><title>New Tab — GC Tabs</title></svelte:head>
+<svelte:head><title>Create Tab — GC Tabs</title></svelte:head>
 
 <TabEditor
 	mode="create"

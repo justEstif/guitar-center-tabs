@@ -36,7 +36,7 @@
 			</div>
 			{#if data.isOwner}
 				<a href="/tab/new"
-					class="bg-gray-900 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-gray-700 active:bg-gray-800">
+					class="bg-gray-900 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-gray-700 active:bg-gray-800 transition-colors duration-150">
 					+ New tab
 				</a>
 			{/if}
@@ -49,8 +49,11 @@
 				{#if data.isOwner}
 					<p class="font-medium text-gray-600">No tabs yet.</p>
 					<p class="text-sm mt-1">Tap <strong>+ New tab</strong> to create your first one.</p>
+					<a href="/tab/new" class="mt-3 inline-flex items-center gap-1.5 bg-amber-600 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-amber-700 transition-colors duration-150">
+						Create your first tab →
+					</a>
 				{:else}
-					<p>No tabs here yet.</p>
+					<p class="text-stone-500">@{data.profileUser.username} hasn't shared any tabs yet. Check back soon!</p>
 				{/if}
 			</div>
 		{:else}
@@ -58,7 +61,7 @@
 				{#each data.tabs as tab}
 					<li>
 						<a href="/tab/{tab.id}"
-							class="block bg-white border border-gray-200 rounded-2xl px-4 py-4 hover:border-gray-300 active:bg-gray-50">
+							class="block bg-white border border-gray-200 rounded-2xl px-4 py-4 hover:border-gray-300 active:bg-gray-50 transition-colors duration-150">
 							<div class="flex items-start justify-between gap-2">
 								<div class="min-w-0">
 									<p class="font-semibold text-gray-900 truncate">{tab.title}</p>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import { fade } from 'svelte/transition';
 	let { data }: { data: PageData } = $props();
 
 	const tab = $derived(data.tab);
@@ -39,21 +40,25 @@
 				<!-- Copy link -->
 				<button
 					onclick={copyLink}
-					class="flex items-center gap-1.5 text-sm text-gray-600 border border-gray-300 rounded-lg px-3 py-1.5 hover:bg-gray-50 active:bg-gray-100">
-					{copied ? '✅ Copied!' : '🔗 Share'}
+					class="flex items-center gap-1.5 text-sm text-gray-600 border border-gray-300 rounded-lg px-3 py-1.5 hover:bg-gray-50 active:bg-gray-100 transition-colors duration-150">
+					{#key copied}
+						<span in:fade={{ duration: 150 }}>
+							{copied ? '✅ Copied!' : '🔗 Share'}
+						</span>
+					{/key}
 				</button>
 
 				<!-- Print -->
 				<button
 					onclick={() => window.print()}
-					class="flex items-center gap-1.5 text-sm text-gray-600 border border-gray-300 rounded-lg px-3 py-1.5 hover:bg-gray-50 active:bg-gray-100">
+					class="flex items-center gap-1.5 text-sm text-gray-600 border border-gray-300 rounded-lg px-3 py-1.5 hover:bg-gray-50 active:bg-gray-100 transition-colors duration-150">
 					🖨️ Print
 				</button>
 
 				<!-- Edit (owner only) -->
 				{#if isOwner}
 					<a href="/tab/{tab.id}/edit"
-						class="flex items-center gap-1.5 text-sm font-semibold bg-gray-900 text-white rounded-lg px-3 py-1.5 hover:bg-gray-700">
+						class="flex items-center gap-1.5 text-sm font-semibold bg-amber-600 text-white rounded-lg px-3 py-1.5 hover:bg-amber-700 transition-colors duration-150">
 						✏️ Edit
 					</a>
 				{/if}
@@ -72,7 +77,7 @@
 			{#if tab.artist}
 				<p class="text-gray-500 mt-0.5">{tab.artist}</p>
 			{/if}
-			<p class="text-xs text-gray-400 mt-2">
+			<p class="text-xs text-stone-500 mt-2">
 				by <a href="/u/{author.username}" class="underline hover:text-gray-600">@{author.username}</a>
 			</p>
 		</div>
@@ -80,7 +85,7 @@
 		<hr class="border-gray-200 mb-6" />
 
 		<!-- Content -->
-		<div class="tab-content text-gray-800 bg-gray-50 rounded-xl p-4">
+		<div class="tab-content text-gray-800 bg-stone-50 rounded-xl p-5 border border-stone-200">
 			{tab.content}
 		</div>
 	</main>

@@ -69,11 +69,11 @@
 	});
 </script>
 
-<div class="min-h-screen bg-gray-50 flex flex-col" style="padding-bottom: {mode === 'edit' ? '140px' : '80px'}">
+<div class="min-h-screen bg-gray-50 flex flex-col" style="padding-bottom: calc({mode === 'edit' ? '140px' : '80px'} + env(safe-area-inset-bottom, 0px))">
 	<!-- Header -->
 	<header class="bg-white border-b border-gray-200 px-4 py-4 shrink-0">
 		<div class="max-w-2xl mx-auto flex items-center justify-between">
-			<button type="button" onclick={() => history.back()} class="text-gray-500 hover:text-gray-900">
+			<button type="button" onclick={() => history.back()} aria-label="Back to {mode === 'create' ? 'your profile' : 'tab'}" class="text-gray-500 hover:text-gray-900">
 				← Back
 			</button>
 			<span class="font-semibold text-gray-900">{mode === 'create' ? 'New tab' : 'Edit tab'}</span>
@@ -81,8 +81,8 @@
 				form="tab-form"
 				type="submit"
 				disabled={!title.trim() || !content.trim()}
-				class="bg-gray-900 text-white text-sm font-semibold px-4 py-2 rounded-xl disabled:opacity-40 hover:bg-gray-700">
-				Save
+				class="bg-amber-600 text-white text-sm font-semibold px-4 py-2 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed hover:bg-amber-700 active:bg-amber-800 transition-colors duration-150">
+				{mode === 'create' ? 'Save tab' : 'Save changes'}
 			</button>
 		</div>
 	</header>
@@ -91,21 +91,21 @@
 	<form id="tab-form" method="POST" {action} class="flex-1 flex flex-col max-w-2xl mx-auto w-full px-4 pt-4 gap-4">
 
 		<!-- Title + Artist -->
-		<div class="flex gap-2">
+		<div class="flex flex-col sm:flex-row gap-2">
 			<input
 				name="title"
 				type="text"
 				bind:value={title}
 				placeholder="Song title *"
 				required
-				class="flex-1 min-w-0 border border-gray-300 rounded-xl px-4 py-3 text-base bg-white focus:outline-none focus:ring-2 focus:ring-gray-900"
+				class="flex-1 min-w-0 border border-gray-300 rounded-xl px-4 py-3 text-base bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-600"
 			/>
 			<input
 				name="artist"
 				type="text"
 				bind:value={artist}
 				placeholder="Artist"
-				class="flex-1 min-w-0 border border-gray-300 rounded-xl px-4 py-3 text-base bg-white focus:outline-none focus:ring-2 focus:ring-gray-900"
+				class="flex-1 min-w-0 border border-gray-300 rounded-xl px-4 py-3 text-base bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-600"
 			/>
 		</div>
 
@@ -115,7 +115,7 @@
 				<button
 					type="button"
 					onclick={() => type = t}
-					class="flex-1 py-2 rounded-xl text-sm font-semibold border transition-colors
+					class="flex-1 py-2 rounded-xl text-sm font-semibold border transition-colors duration-150
 						{type === t
 							? 'bg-gray-900 text-white border-gray-900'
 							: 'bg-white text-gray-600 border-gray-300 hover:border-gray-500'}">
@@ -123,6 +123,13 @@
 				</button>
 			{/each}
 		</div>
+		<p class="text-xs text-stone-500 -mt-1">
+			{type === 'TAB'
+				? 'Standard guitar tablature — string and fret notation.'
+				: type === 'CHORDS'
+				? 'Chord charts and progressions.'
+				: 'Lyrics with or without chord markers.'}
+		</p>
 		<input type="hidden" name="type" value={type} />
 
 		<!-- Editor -->
@@ -139,7 +146,7 @@
 				spellcheck="false"
 				autocorrect="off"
 				autocapitalize="off"
-				class="tab-content flex-1 w-full min-h-48 border border-gray-300 rounded-xl p-4 bg-white text-gray-800 resize-none focus:outline-none focus:ring-2 focus:ring-gray-900"
+				class="tab-content flex-1 w-full min-h-48 border border-gray-300 rounded-xl p-4 bg-white text-gray-800 resize-none focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-600"
 			></textarea>
 		</div>
 
@@ -152,40 +159,43 @@
 <!-- Sticky toolbar — floats above keyboard on mobile -->
 <div
 	class="fixed left-0 right-0 z-50 bg-white border-t border-gray-200 px-2 py-2 shadow-lg"
-	style="bottom: {toolbarBottom}px">
+	style="bottom: calc({toolbarBottom}px + env(safe-area-inset-bottom, 0px))">
 	<div class="max-w-2xl mx-auto space-y-1.5">
 		<!-- String shortcuts -->
 		<div class="flex gap-1 items-center">
-			<span class="text-xs text-gray-400 font-medium w-10 shrink-0">str</span>
+			<span class="text-xs text-gray-400 font-medium w-14 shrink-0">strings</span>
 			{#each strings as s}
 				<button
 					type="button"
 					onclick={() => insertString(s)}
-					class="flex-1 h-9 rounded-lg bg-gray-900 text-white text-sm font-bold hover:bg-gray-700 active:bg-gray-600">
+					aria-label="{s} string"
+					class="flex-1 h-11 rounded-lg bg-gray-900 text-white text-sm font-bold hover:bg-gray-700 active:bg-gray-600 transition-colors duration-150">
 					{s}
 				</button>
 			{/each}
 		</div>
 		<!-- Common chars -->
 		<div class="flex gap-1 items-center">
-			<span class="text-xs text-gray-400 font-medium w-10 shrink-0">sym</span>
+			<span class="text-xs text-gray-400 font-medium w-14 shrink-0">symbols</span>
 			{#each chars as c}
 				<button
 					type="button"
 					onclick={() => insert(c)}
-					class="flex-1 h-9 rounded-lg bg-gray-100 text-gray-800 text-sm font-mono font-semibold hover:bg-gray-200 active:bg-gray-300 border border-gray-200">
+					aria-label="Insert {c}"
+					class="flex-1 h-11 rounded-lg bg-gray-100 text-gray-800 text-sm font-mono font-semibold hover:bg-gray-200 active:bg-gray-300 border border-gray-200 transition-colors duration-150">
 					{c}
 				</button>
 			{/each}
 		</div>
 		<!-- Digits -->
 		<div class="flex gap-1 items-center">
-			<span class="text-xs text-gray-400 font-medium w-10 shrink-0">num</span>
+			<span class="text-xs text-gray-400 font-medium w-14 shrink-0">frets</span>
 			{#each digits as d}
 				<button
 					type="button"
 					onclick={() => insert(d)}
-					class="flex-1 h-9 rounded-lg bg-gray-100 text-gray-800 text-sm font-mono font-semibold hover:bg-gray-200 active:bg-gray-300 border border-gray-200">
+					aria-label="Insert {d}"
+					class="flex-1 h-11 rounded-lg bg-gray-100 text-gray-800 text-sm font-mono font-semibold hover:bg-gray-200 active:bg-gray-300 border border-gray-200 transition-colors duration-150">
 					{d}
 				</button>
 			{/each}
