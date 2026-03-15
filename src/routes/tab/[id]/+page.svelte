@@ -2,7 +2,9 @@
 	import type { PageData } from './$types';
 	let { data }: { data: PageData } = $props();
 
-	const { tab, author, isOwner } = data;
+	const tab = $derived(data.tab);
+	const author = $derived(data.author);
+	const isOwner = $derived(data.isOwner);
 
 	const typeLabel = { TAB: 'Tab', CHORDS: 'Chords', LYRICS: 'Lyrics' };
 	const typeColor = {

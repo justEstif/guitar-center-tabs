@@ -14,11 +14,13 @@
 		action: string;
 	} = $props();
 
-	// Form state
+	// Form state — use tab prop as initial value only (it won't change after mount)
 	let title = $state(tab?.title ?? '');
 	let artist = $state(tab?.artist ?? '');
 	let type = $state<'TAB' | 'CHORDS' | 'LYRICS'>(tab?.type ?? 'TAB');
 	let content = $state(tab?.content ?? '');
+	// suppress svelte's "captures initial value" warning — intentional here
+	void tab;
 
 	// Toolbar + viewport
 	let textarea: HTMLTextAreaElement;
@@ -71,9 +73,9 @@
 	<!-- Header -->
 	<header class="bg-white border-b border-gray-200 px-4 py-4 shrink-0">
 		<div class="max-w-2xl mx-auto flex items-center justify-between">
-			<a href="javascript:history.back()" class="text-gray-500 hover:text-gray-900">
+			<button type="button" onclick={() => history.back()} class="text-gray-500 hover:text-gray-900">
 				← Back
-			</a>
+			</button>
 			<span class="font-semibold text-gray-900">{mode === 'create' ? 'New tab' : 'Edit tab'}</span>
 			<button
 				form="tab-form"

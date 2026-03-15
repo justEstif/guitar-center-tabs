@@ -18,3 +18,4 @@ local.db-shm
 
 # OS
 .DS_Store
+.vercel

@@ -38,7 +38,7 @@
 			</div>
 
 			<div>
-				<label class="block text-sm font-medium text-gray-700 mb-1">PIN</label>
+				<label for="pin-numpad" class="block text-sm font-medium text-gray-700 mb-1">PIN</label>
 				<input type="hidden" name="pin" value={pin} />
 
 				<div class="flex justify-center gap-3 mb-3">
@@ -50,7 +50,7 @@
 					{/each}
 				</div>
 
-				<div class="grid grid-cols-3 gap-2">
+				<div id="pin-numpad" class="grid grid-cols-3 gap-2">
 					{#each ['1','2','3','4','5','6','7','8','9'] as d}
 						<button type="button" onclick={() => appendDigit(d)}
 							class="h-12 rounded-xl border border-gray-200 text-lg font-semibold text-gray-800 bg-gray-50 hover:bg-gray-100 active:bg-gray-200">
