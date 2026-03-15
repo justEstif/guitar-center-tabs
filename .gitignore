@@ -16,6 +16,9 @@ local.db-shm
 .env.*
 !.env.example
 
+# PWA dev build
+dev-dist/
+
 # OS
 .DS_Store
 .vercel
