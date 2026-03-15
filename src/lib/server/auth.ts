@@ -28,19 +28,18 @@ export async function createSession(userId: string): Promise<string> {
 }
 
 export async function getSessionUser(sessionId: string) {
-	const row = await db.query.sessions.findFirst({
-		where: eq(sessions.id, sessionId),
-		with: { userId: false } as never
+	const session = await db.query.sessions.findFirst({
+		where: eq(sessions.id, sessionId)
 	});
 
-	if (!row) return null;
-	if (row.expiresAt < new Date()) {
+	if (!session) return null;
+	if (session.expiresAt < new Date()) {
 		await db.delete(sessions).where(eq(sessions.id, sessionId));
 		return null;
 	}
 
 	const user = await db.query.users.findFirst({
-		where: eq(users.id, row.userId)
+		where: eq(users.id, session.userId)
 	});
 
 	return user ?? null;
@@ -70,7 +69,6 @@ export function getSessionToken(event: RequestEvent): string | undefined {
 	return event.cookies.get(SESSION_COOKIE);
 }
 
-// --- Cleanup old sessions ---
 export async function purgeExpiredSessions() {
 	await db.delete(sessions).where(lt(sessions.expiresAt, new Date()));
 }

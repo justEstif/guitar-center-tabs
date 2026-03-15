@@ -22,6 +22,9 @@
 <svelte:head>
 	<title>{tab.title}{tab.artist ? ` — ${tab.artist}` : ''} | GC Tabs</title>
 	<meta name="description" content="Guitar tab for {tab.title}{tab.artist ? ` by ${tab.artist}` : ''}" />
+	<meta property="og:title" content="{tab.title}{tab.artist ? ` — ${tab.artist}` : ''}" />
+	<meta property="og:description" content="Guitar {tab.type.toLowerCase()} shared by @{author.username} on GC Tabs" />
+	<meta property="og:type" content="article" />
 </svelte:head>
 
 <div class="min-h-screen bg-white">
