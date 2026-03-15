@@ -9,15 +9,18 @@ export default defineConfig({
 		sveltekit(),
 		SvelteKitPWA({
 			registerType: 'autoUpdate',
+			// Dev mode: use a minimal sw that just responds to requests (no precache in dev)
 			devOptions: {
-				enabled: true
+				enabled: true,
+				type: 'module',
+				navigateFallback: '/'
 			},
 			manifest: {
 				name: 'GC Tabs',
 				short_name: 'GC Tabs',
 				description: 'Share guitar tabs with your students',
-				theme_color: '#d97706', // amber-600
-				background_color: '#fffbeb', // amber-50
+				theme_color: '#d97706',
+				background_color: '#fffbeb',
 				display: 'standalone',
 				scope: '/',
 				start_url: '/',
@@ -42,10 +45,31 @@ export default defineConfig({
 				]
 			},
 			workbox: {
-				// Only cache client-side assets — app is SSR (adapter-vercel), no prerendered pages
-			globPatterns: ['client/**/*.{js,css,ico,png,svg,webp,webmanifest}'],
-				// Don't precache server-rendered pages (adapter-vercel / SSR)
-				navigateFallback: undefined
+				// App is SSR (adapter-vercel) — only precache client-side assets, not HTML pages
+				globPatterns: ['client/**/*.{js,css,ico,png,svg,webp,webmanifest}'],
+				// No navigateFallback: every navigation hits the server (SSR)
+				navigateFallback: null,
+				// Cache Google Fonts at runtime
+				runtimeCaching: [
+					{
+						urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+						handler: 'CacheFirst',
+						options: {
+							cacheName: 'google-fonts-cache',
+							expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 },
+							cacheableResponse: { statuses: [0, 200] }
+						}
+					},
+					{
+						urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+						handler: 'CacheFirst',
+						options: {
+							cacheName: 'gstatic-fonts-cache',
+							expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 },
+							cacheableResponse: { statuses: [0, 200] }
+						}
+					}
+				]
 			}
 		})
 	]
