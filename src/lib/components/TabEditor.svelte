@@ -67,7 +67,7 @@
 	});
 </script>
 
-<div class="min-h-screen bg-gray-50 flex flex-col pb-20">
+<div class="min-h-screen bg-gray-50 flex flex-col" style="padding-bottom: {mode === 'edit' ? '140px' : '80px'}">
 	<!-- Header -->
 	<header class="bg-white border-b border-gray-200 px-4 py-4 shrink-0">
 		<div class="max-w-2xl mx-auto flex items-center justify-between">
